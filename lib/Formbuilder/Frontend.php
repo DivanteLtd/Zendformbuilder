@@ -33,9 +33,9 @@
 
 class Formbuilder_Frontend {
 
-    private $languages = null;
+    protected $languages = null;
 
-    private function getLanguages() {
+    protected function getLanguages() {
         if ($this->languages == null) {
             $languages = Pimcore_Tool::getValidLanguages();
             $this->languages = $languages;
@@ -46,10 +46,10 @@ class Formbuilder_Frontend {
     /**
      *
      * @param string $name
-     * @param string $locale 
+     * @param string $locale
      * return Zend_Form
      */
-    private function getStaticForm($id, $locale) {
+    protected function getStaticForm($id, $locale) {
         if (file_exists(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/form/form_" . $id . ".ini")) {
             $config = new Zend_Config_Ini(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/form/form_" . $id . ".ini", 'config');
 
@@ -72,7 +72,7 @@ class Formbuilder_Frontend {
         }
     }
 
-    private function getDynamicForm($id, $locale) {
+    protected function getDynamicForm($id, $locale) {
 
         if (file_exists(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/main_" . $id . ".json")) {
             $config = new Zend_Config_Json(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/main_" . $id . ".json");
@@ -126,7 +126,7 @@ class Formbuilder_Frontend {
                 }else{
                     $form = new Twitter_Bootstrap_Form_Vertical($config->form);
                 }
-                
+
                 $form->setDisableTranslator(true);
                 if ($locale != null && $locale != "") {
 
@@ -145,7 +145,7 @@ class Formbuilder_Frontend {
 
     /**
      * If $dynamic equal true, the form form is completly rebuild. It is useful if you need to interact to the form with hooks.
-     *  
+     *
      * @param string $name
      * @param string $locale
      * @param boolean $dynamic
@@ -172,7 +172,7 @@ class Formbuilder_Frontend {
         }
     }
 
-    private function translateForm( $id, $locale) {/* @var $form Zend_Form */
+    protected function translateForm( $id, $locale) {/* @var $form Zend_Form */
 
         $trans = new Zend_Translate_Adapter_Csv(array("delimiter" => ",", "disableNotices" => true));
 

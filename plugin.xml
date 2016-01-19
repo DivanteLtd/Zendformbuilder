@@ -6,7 +6,7 @@
         <pluginNiceName>Zend Form Builder</pluginNiceName>
         <pluginIcon>/plugins/Zendformbuilder/static/img/logo_formbuilder.png</pluginIcon>
         <pluginServer>thirdpartyplugins.pimcore.org</pluginServer>
-        <pluginVersion>1.2.1</pluginVersion>
+        <pluginVersion>1.2.2</pluginVersion>
         <pluginRevision>2</pluginRevision>
         <pluginBuildTimestamp>1314635984</pluginBuildTimestamp>
         <pluginIframeSrc></pluginIframeSrc>

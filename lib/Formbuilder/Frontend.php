@@ -77,18 +77,8 @@ class Formbuilder_Frontend {
         if (file_exists(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/form/form_" . $id . ".ini")) {
             $config = new Zend_Config_Ini(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/form/form_" . $id . ".ini", 'config');
 
-
-            $trans = $this->translateForm($id, $locale);
-
-            Zend_Form::setDefaultTranslator($trans);
-
-            $form = $this->_createInstance($config->form, $className);
-            $form->setDisableTranslator(true);
-            if ($locale != null && $locale != "") {
-
-                $form->setTranslator($trans);
-            }
-
+            $form = $this->createInstance($config->form, $className);
+            $this->initTranslation($form, $id, $locale);
 
             return $form;
         } else {
@@ -108,16 +98,8 @@ class Formbuilder_Frontend {
             $builder->setLocale($locale);
             $array = $builder->buildDynamicForm();
 
-            $trans = $this->translateForm($id, $locale);
-
-            Zend_Form::setDefaultTranslator($trans);
-
-            $form = $this->_createInstance($array, $className);
-            $form->setDisableTranslator(true);
-            if ($locale != null && $locale != "") {
-
-                $form->setTranslator($trans);
-            }
+            $form = $this->createInstance($array, $className);
+            $this->initTranslation($form, $id, $locale);
 
             return $form;
         } else {
@@ -125,12 +107,29 @@ class Formbuilder_Frontend {
         }
     }
 
-    protected function _createInstance($config, $className = 'Zend_Form') {
+    protected function createInstance($config, $className = 'Zend_Form') {
         $reflClass = new ReflectionClass($className);
         if(!($reflClass->isSubclassOf('Zend_Form') || $reflClass->name == 'Zend_Form')) {
             throw new Exception('Form class must be a subclass of "Zend_Form"');
         }
         return $reflClass->newInstance($config);
+    }
+
+    protected function initTranslation(\Zend_Form $form, $id, $locale = null) {
+
+        if($locale === null) {
+            $locale = \Zend_Locale::findLocale();
+        }
+
+        $trans = $this->translateForm($id, $locale);
+
+        if ($locale != null && $locale != "") {
+            if(null === $form->getTranslator()) {
+                $form->setTranslator($trans);
+            } else {
+                $form->getTranslator()->addTranslation($trans);
+            }
+        }
     }
 
     public function getTwitterForm($name, $locale = null,$horizontal=true) {
@@ -178,9 +177,10 @@ class Formbuilder_Frontend {
      * @param string $name
      * @param string $locale
      * @param boolean $dynamic
+     * @param string Custom form class
      * @return Zend_Form
      */
-    public function getForm($name, $locale=null, $dynamic=false) {
+    public function getForm($name, $locale=null, $dynamic=false, $formClass = null) {
         $this->getLanguages();
 
         $table = new Formbuilder_Formbuilder();
@@ -188,10 +188,11 @@ class Formbuilder_Frontend {
 
         if (is_numeric($id) == true) {
 
+            $class = $formClass ?: $this->getFormClass();
             if ($dynamic == false) {
-                $form = $this->getStaticForm($id, $locale, $this->getFormClass());
+                $form = $this->getStaticForm($id, $locale, $class);
             } else {
-                $form = $this->getDynamicForm($id, $locale, $this->getFormClass());
+                $form = $this->getDynamicForm($id, $locale, $class);
             }
 
             return $form;

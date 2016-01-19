@@ -224,7 +224,7 @@ class Formbuilder_Builder {
 
             $text = "";
             foreach ($this->translations[$lang] as $key => $value) {
-                $text .= "\"" . $key . "\",\"" . $value . "\"\n";
+                $text .= "\"" . mb_strtolower($key) . "\",\"" . $value . "\"\n";
             }
             file_put_contents(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/lang/form_" . $this->id . "_" . $lang . ".csv", $text, FILE_TEXT);
         }

@@ -6,7 +6,7 @@
         <pluginNiceName>Zend Form Builder</pluginNiceName>
         <pluginIcon>/plugins/Zendformbuilder/static/img/logo_formbuilder.png</pluginIcon>
         <pluginServer>thirdpartyplugins.pimcore.org</pluginServer>
-        <pluginVersion>1.2.0</pluginVersion>
+        <pluginVersion>1.2.1</pluginVersion>
         <pluginRevision>2</pluginRevision>
         <pluginBuildTimestamp>1314635984</pluginBuildTimestamp>
         <pluginIframeSrc></pluginIframeSrc>
@@ -58,6 +58,7 @@
             <path>/Zendformbuilder/static/js/comp/filter/stringToLower.js</path>
             <path>/Zendformbuilder/static/js/comp/filter/stringToUpper.js</path>
             <path>/Zendformbuilder/static/js/comp/filter/stringTrim.js</path>
+            <path>/Zendformbuilder/static/js/comp/filter/stripNewlines.js</path>
             <path>/Zendformbuilder/static/js/comp/filter/stripTags.js</path>
             <path>/Zendformbuilder/static/js/comp/validator/base.js</path>
             <path>/Zendformbuilder/static/js/comp/validator/alnum.js</path>

@@ -29,66 +29,33 @@ POSSIBILITY OF SUCH DAMAGE.
 
  */
 
-pimcore.registerNS("pimcore.plugin.Formbuilder");
+pimcore.registerNS("Formbuilder.comp.filter.stripNewlines");
+Formbuilder.comp.filter.stripNewlines = Class.create(Formbuilder.comp.filter.base,{
 
-pimcore.plugin.Formbuilder = Class.create(pimcore.plugin.admin, {
+    type: "stripNewlines",
+
+    initialize: function (treeNode, initData, parent) {
 
 
-    getClassName: function () {
-        return "pimcore.plugin.Formbuilder";
+
+        this.treeNode = treeNode;
+        this.initData(initData);
     },
 
-    initialize: function() {
-        pimcore.plugin.broker.registerPlugin(this);
-
-        //debugger;
+    getTypeName: function () {
+        return t("stripNewlines");
     },
 
-
-    uninstall: function() {
-    
+    getIconClass: function () {
+        return "Formbuilder_icon_filter";
     },
 
-    pimcoreReady: function (params,broker){
-
-        var user = pimcore.globalmanager.get("user");
+    getForm: function($super){
+        $super();
         
-        if(user.admin == true){
-
-            var toolbar = Ext.getCmp("pimcore_panel_toolbar");
-
-            var action = new Ext.Action({
-                id:"Formbuilder_setting_button",
-                text: t('formBuilder settings'),
-                iconCls:"Formbuilder_icon_fbuilder",
-                handler: function(){
-                    var gestion = new Formbuilder.settings;
-                }
-            });
-
-            if(toolbar){//old version
-                toolbar.items.items[1].menu.add(action);
-            }else{//new version
-                layoutToolbar.extrasMenu.add(action);
-            }
-        
-        }
-        this.getLanguages();
-    },
-
-    getLanguages: function(){
-        Ext.Ajax.request({
-            url: '/admin/settings/get-available-languages',
-            scope:this,
-            success: function (response) {
-                var resp = Ext.util.JSON.decode(response.responseText);
-                pimcore.globalmanager.add("Formbuilder.languages",resp);
-            }
-        });
+        return this.form;
     }
 
 
 
 });
-
-new pimcore.plugin.Formbuilder();

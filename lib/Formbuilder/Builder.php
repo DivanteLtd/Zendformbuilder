@@ -36,8 +36,8 @@ class Formbuilder_Builder {
     public $datas = null;
     public $config = null;
     public $id = null;
-    private $translate = null;
-    private $translateValidator = null;
+    protected $translate = null;
+    protected $translateValidator = null;
     public $translations = null;
     public $languages = null;
     public $locale = null;
@@ -88,7 +88,7 @@ class Formbuilder_Builder {
         $writer->write();
     }
 
-    private function createForm() {
+    protected function createForm() {
         $this->translate = array();
         $this->translateValidator = array();
 
@@ -130,7 +130,7 @@ class Formbuilder_Builder {
         }
     }
 
-    private function correctArray($datas) {
+    protected function correctArray($datas) {
         $ret = array();
 
         foreach ($datas as $k => $v) {
@@ -171,7 +171,7 @@ class Formbuilder_Builder {
         return true;
     }
 
-    private function buildTranslate() {
+    protected function buildTranslate() {
 
         $this->translations = array();
 
@@ -206,7 +206,7 @@ class Formbuilder_Builder {
         $this->saveTranslations();
     }
 
-    private function saveTranslations() {
+    protected function saveTranslations() {
 
         if (!is_dir(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/lang/")) {
             mkdir(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/lang/");
@@ -224,26 +224,26 @@ class Formbuilder_Builder {
 
             $text = "";
             foreach ($this->translations[$lang] as $key => $value) {
-                $text .= "\"" . $key . "\",\"" . $value . "\"\n";
+                $text .= "\"" . mb_strtolower($key) . "\",\"" . $value . "\"\n";
             }
             file_put_contents(PIMCORE_PLUGINS_PATH . "/Zendformbuilder/data/lang/form_" . $this->id . "_" . $lang . ".csv", $text, FILE_TEXT);
         }
     }
 
-    private function addTranslateMulti($array) {
+    protected function addTranslateMulti($array) {
         foreach ($array as $elem) {
             $this->translations[$elem["locale"]][$elem["multiOptions"]] = $elem["value"];
         }
     }
 
-    private function addTranslate($original, $array) {
+    protected function addTranslate($original, $array) {
         foreach ($array as $elem) {
 
             $this->translations[$elem["locale"]][$original] = $elem["value"];
         }
     }
 
-    private function buildFieldSet($datas, $order) {
+    protected function buildFieldSet($datas, $order) {
 
         $config = array();
         $config[$datas["name"]] = array();
@@ -303,7 +303,7 @@ class Formbuilder_Builder {
         return $config;
     }
 
-    private function buildField($datas) {
+    protected function buildField($datas) {
         $config = array();
         $config[$datas["name"]] = array();
         $config[$datas["name"]]["type"] = $datas["fieldtype"];
@@ -361,16 +361,16 @@ class Formbuilder_Builder {
         if (count($options) > 0) {
             $config[$datas["name"]]["options"] = $options;
         }
-        
+
         $config[$datas["name"]]["options"]["disableTranslator"] = false;
 
         $config = $this->fireHook($cClass, $cAction, $config);
-        
+
 
         return $config;
     }
 
-    private function fireHook($class, $method, $config) {
+    protected function fireHook($class, $method, $config) {
 
         if ($class != null && $class != "" && $method != null && $method != "") {
 
@@ -398,7 +398,7 @@ class Formbuilder_Builder {
         return $config;
     }
 
-    private function buildMultiData($datas) {
+    protected function buildMultiData($datas) {
 
         $arr = array();
 
@@ -413,7 +413,7 @@ class Formbuilder_Builder {
         return $arr;
     }
 
-    private function buildFilterValidator($datas) {
+    protected function buildFilterValidator($datas) {
         $iFilter = array();
         $iValidator = array();
 
@@ -455,7 +455,7 @@ class Formbuilder_Builder {
         return $FilVal;
     }
 
-    private function buildFilter($datas, $index) {
+    protected function buildFilter($datas, $index) {
 
         $filter = array();
         $filter[$datas["fieldtype"] . $index] = array();
@@ -499,7 +499,7 @@ class Formbuilder_Builder {
         return $filter;
     }
 
-    private function addValidatorTranslate($datas, $index) {
+    protected function addValidatorTranslate($datas, $index) {
         if (is_array($data["messages"])) {
             foreach ($datas["messages"] as $key) {
 
@@ -517,7 +517,7 @@ class Formbuilder_Builder {
         }
     }
 
-    private function buildValidator($datas, $index) {
+    protected function buildValidator($datas, $index) {
         $validator = array();
         $validator[$datas["fieldtype"] . $index] = array();
         $validator[$datas["fieldtype"] . $index]["validator"] = $datas["fieldtype"];

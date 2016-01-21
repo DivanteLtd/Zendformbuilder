@@ -36,9 +36,9 @@ class Twitter_Bootstrap_Form_Element_Button extends Twitter_Bootstrap_Form_Eleme
      *
      * @var string
      */
-    private $_icon;
+    protected $_icon;
 
-    private $_iconPosition = self::ICON_POSITION_LEFT;
+    protected $_iconPosition = self::ICON_POSITION_LEFT;
 
     public function __construct ($spec, $options = null)
     {
@@ -71,7 +71,7 @@ class Twitter_Bootstrap_Form_Element_Button extends Twitter_Bootstrap_Form_Eleme
      *
      * @return string
      */
-    private function _renderIcon ()
+    protected function _renderIcon ()
     {
         return !empty($this->_icon) ? '<i class="' . $this->_icon . '"></i>' : '';
     }

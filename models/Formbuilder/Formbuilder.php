@@ -31,7 +31,7 @@ POSSIBILITY OF SUCH DAMAGE.
  */
 class Formbuilder_Formbuilder {
 
-    private $table;
+    protected $table;
 
     public function init() {
         $pimDb = Pimcore_Resource_Mysql::get();
@@ -41,8 +41,8 @@ class Formbuilder_Formbuilder {
         }else{
             Zend_Db_Table::setDefaultAdapter($pimDb);
         }
-        
-        
+
+
 
         $this->table = new Formbuilder_DbTable_Formbuilder();
     }

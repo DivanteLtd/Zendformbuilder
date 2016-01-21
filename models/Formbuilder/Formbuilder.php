@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * Class Formbuilder_Formbuilder
+ * Modified by Maciej Koprek (mkoprek@divante.pl)
+*/
+
 /*
 
 Copyright (c) 2011, alexandre delattre
@@ -28,77 +34,67 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
- */
-class Formbuilder_Formbuilder {
+*/
 
+class Formbuilder_Formbuilder
+{
     protected $table;
 
-    public function init() {
+    public function __construct()
+    {
         $pimDb = Pimcore_Resource_Mysql::get();
         $rev = Pimcore_Version::$revision;
-        if($rev>1350){
+        if ($rev > 1350) {
             Zend_Db_Table::setDefaultAdapter($pimDb->getResource());
-        }else{
+        } else {
             Zend_Db_Table::setDefaultAdapter($pimDb);
         }
-
-
 
         $this->table = new Formbuilder_DbTable_Formbuilder();
     }
 
-    public function create($name) {
-        $this->init();
+    public function create($name)
+    {
         $name = addslashes($name);
-        $id = $this->table->insert(array("name" => $name, "date" => time()));
+        $id = $this->table->insert(array('name' => $name, 'date' => time()));
 
         return $id;
     }
 
-    public function delete($id) {
-        $this->init();
-        if (is_int($id)) {
-            $ret = $this->table->delete("id=" . $id);
-            if ($ret > 0) {
-                return true;
-            } else {
-                return false;
-            }
+    public function delete($id)
+    {
+        $id = (int)$id;
+        $ret = $this->table->delete(array('id=?' => $id));
+        if ($ret > 0) {
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
-    public function read() {
-        $this->init();
+    public function read()
+    {
         $rows = $this->table->fetchAll();
-
         return $rows;
     }
 
-    public function rename($id, $name) {
-        $this->init();
-        if (is_int($id)) {
-            $name = addslashes($name);
-            $data = array("name" => $name);
-            $this->table->update($data, "id=" . $id);
-            return true;
-        }
-        return false;
+    public function rename($id, $name)
+    {
+        $id = (int)$id;
+        $this->table->update(array('name' => $name), array('id=?' => $id));
+        return true;
     }
 
-    public function getName($id) {
-        $this->init();
-        if (is_int($id)) {
-            $row = $this->table->fetchRow("id=" . $id);
-            return $row->name;
-        }
-        return false;
+    public function getName($id)
+    {
+        $id = (int)$id;
+        $row = $this->table->fetchRow(array('id=?' => $id));
+        return $row->name;
     }
 
-    public function getIdByName($name) {
-        $this->init();
-        $name = addslashes($name);
-        $row = $this->table->fetchRow("name = '" . $name . "'");
+    public function getIdByName($name)
+    {
+        $row = $this->table->fetchRow(array('name=?' => $name));
         return $row->id;
     }
 

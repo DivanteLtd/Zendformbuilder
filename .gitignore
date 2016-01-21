@@ -1,3 +1,4 @@
 /data/*.json
 /data/form
 /data/lang/*.csv
+.idea/*
